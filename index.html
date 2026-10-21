@@ -1,0 +1,150 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #f4f6fa; color: #172033; }
+    header { background: #172033; color: white; padding: 18px 24px; }
+    header h1 { margin: 0 0 12px; font-size: 24px; }
+    nav a { color: white; margin-right: 18px; text-decoration: underline; }
+    .layout { display: flex; min-height: 80vh; }
+    aside { width: 210px; padding: 24px; background: #e5eaf2; }
+    aside a { display: block; padding: 12px 0; color: #172033; }
+    main { flex: 1; padding: 28px; min-width: 0; }
+    section, article { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; }
+    label { display: block; margin: 12px 0 6px; font-weight: bold; }
+    input, select { width: 100%; max-width: 420px; padding: 10px; border: 1px solid #667085; border-radius: 5px; }
+    button { padding: 10px 16px; margin-top: 12px; background: #174ea6; color: white; border: 0; border-radius: 5px; cursor: pointer; }
+    button:focus, a:focus, input:focus, select:focus { outline: 3px solid #e09b00; outline-offset: 3px; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; min-width: 450px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #d5dbe5; }
+    th { background: #eaf0f8; }
+    dialog { border: 0; border-radius: 10px; padding: 24px; max-width: 420px; width: calc(100% - 32px); }
+    dialog::backdrop { background: rgb(0 0 0 / 55%); }
+    footer { background: #172033; color: white; padding: 20px; text-align: center; }
+    .notice { color: #17643a; font-weight: bold; }
+    @media (max-width: 650px) {
+      .layout { display: block; }
+      aside { width: 100%; }
+      main { padding: 16px; }
+      nav a { display: inline-block; margin: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Enterprise Dashboard</h1>
+    <nav aria-label="Main navigation">
+      <a href="#overview">Overview</a>
+      <a href="#users">Users</a>
+      <a href="#reports">Reports</a>
+      <a href="#add-user">Add user</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <aside aria-label="Sidebar">
+      <h2>Workspace</h2>
+      <nav aria-label="Dashboard navigation">
+        <a href="#overview">Dashboard</a>
+        <a href="#users">User management</a>
+        <a href="#reports">Analytics and reports</a>
+        <a href="#add-user">Create user</a>
+      </nav>
+    </aside>
+
+    <main id="overview">
+      <section aria-labelledby="overview-title">
+        <h2 id="overview-title">Overview</h2>
+        <p>Welcome to your accessible workspace.</p>
+        <p><strong>Total users:</strong> 3</p>
+        <p><strong>System status:</strong> Operational</p>
+        <button type="button" id="open-dialog">Open help dialog</button>
+      </section>
+
+      <section id="users" aria-labelledby="users-title">
+        <h2 id="users-title">User Directory</h2>
+        <div class="table-wrap">
+          <table>
+            <caption>Registered workspace users</caption>
+            <thead>
+              <tr><th scope="col">Name</th><th scope="col">Role</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Aarav Sharma</th><td>Administrator</td><td>Active</td></tr>
+              <tr><th scope="row">Priya Singh</th><td>Editor</td><td>Active</td></tr>
+              <tr><th scope="row">Rahul Verma</th><td>Viewer</td><td>Pending</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="reports" aria-labelledby="reports-title">
+        <h2 id="reports-title">Reports</h2>
+        <article>
+          <h3>Monthly activity</h3>
+          <p>Workspace activity is available for review by authorized users.</p>
+        </article>
+      </section>
+
+      <section id="add-user" aria-labelledby="form-title">
+        <h2 id="form-title">Add a User</h2>
+        <form id="user-form">
+          <fieldset>
+            <legend>User information</legend>
+            <label for="full-name">Full name (required)</label>
+            <input id="full-name" name="fullName" autocomplete="name" required minlength="2" aria-describedby="name-help">
+            <p id="name-help">Enter at least two characters.</p>
+
+            <label for="email">Email address (required)</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+
+            <label for="role">User role</label>
+            <select id="role" name="role" required>
+              <option value="">Choose a role</option>
+              <option>Administrator</option>
+              <option>Editor</option>
+              <option>Viewer</option>
+            </select>
+            <button type="submit">Add user</button>
+          </fieldset>
+        </form>
+        <p id="form-message" class="notice" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="help-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+    <h2 id="dialog-title">Dashboard help</h2>
+    <p id="dialog-description">Use the navigation links to move between dashboard sections. All controls support keyboard focus.</p>
+    <form method="dialog">
+      <button type="submit">Close dialog</button>
+    </form>
+  </dialog>
+
+  <footer>
+    <p>Enterprise Dashboard · Accessible HTML5 structure</p>
+  </footer>
+
+  <script>
+    const helpDialog = document.getElementById("help-dialog");
+    const openDialogButton = document.getElementById("open-dialog");
+
+    openDialogButton.addEventListener("click", () => helpDialog.showModal());
+
+    document.getElementById("user-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = document.getElementById("full-name").value.trim();
+      document.getElementById("form-message").textContent =
+        "Form validated successfully for " + name + ". Demo only; no data was saved.";
+      event.target.reset();
+    });
+  </script>
+</body>
+</html>
+```
